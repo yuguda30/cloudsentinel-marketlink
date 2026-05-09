@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="form-section">
+    <div class="form-card">
+        <div class="form-header">
+            <h1>Post a New Listing</h1>
+            <p>Upload your product or service and connect with buyers across Nigeria.</p>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data">
+            <div class="upload-area">
+                <div class="upload-icon">📷</div>
+                <label for="image">
+                    <strong>Click to upload product photo</strong>
+                    <span>JPG, JPEG, PNG — maximum size 1MB</span>
+                </label>
+                <input type="file" name="image" id="image" accept=".jpg,.jpeg,.png" required>
+            </div>
+
+            <div class="form-group">
+                <label>Item Title *</label>
+                <input type="text" name="title" placeholder="e.g. iPhone 15 Pro Max 256GB" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Category *</label>
+                    <select name="category" required>
+                        <option value="">Select Category</option>
+                        <option>Electronics</option>
+                        <option>Fashion</option>
+                        <option>Vehicles</option>
+                        <option>Home & Furniture</option>
+                        <option>Food & Groceries</option>
+                        <option>Agriculture</option>
+                        <option>Services</option>
+                        <option>Jobs</option>
+                        <option>Education</option>
+                        <option>Others</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Condition *</label>
+                    <select name="condition" required>
+                        <option value="">Select Condition</option>
+                        <option>Brand New</option>
+                        <option>Foreign Used</option>
+                        <option>Nigerian Used</option>
+                        <option>Refurbished</option>
+                        <option>Service</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Price (₦) *</label>
+                    <input type="number" name="price" placeholder="e.g. 150000" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Phone Number *</label>
+                    <input type="text" name="phone" placeholder="08XXXXXXXXX" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>State *</label>
+                    <select name="state" id="stateSelect" required>
+                        <option value="">Select State</option>
+                        {% for state in states %}
+                            <option value="{{ state }}">{{ state }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>LGA *</label>
+                    <select name="lga" id="lgaSelect" required>
+                        <option value="">Select LGA</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Description *</label>
+                <textarea name="description" rows="5" placeholder="Describe your item, condition, features, reason for selling, or service details..." required></textarea>
+            </div>
+
+            <div class="safety-alert">
+                <strong>Safety Reminder:</strong> Do not request advance payment from buyers. Arrange safe communication and physical inspection where possible.
+            </div>
+
+            <div class="form-actions">
+                <a href="{{ url_for('main.home') }}" class="btn btn-outline">Cancel</a>
+                <button type="submit" class="btn btn-primary">Publish Listing</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+
+{% endblock %}

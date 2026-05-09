@@ -1,0 +1,25 @@
+.auth-section {
+    display: flex;
+    justify-content: center;
+    padding: 60px;
+}
+
+.auth-card {
+    background: white;
+    padding: 30px;
+    width: 400px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.auth-card h1 {
+    margin-bottom: 10px;
+}
+
+.auth-card p {
+    margin-bottom: 20px;
+}
+
+.auth-switch {
+    margin-top: 15px;
+}

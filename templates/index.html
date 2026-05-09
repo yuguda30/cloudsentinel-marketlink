@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <div class="sidebar-card">
+            <div class="sidebar-title">Filter Listings</div>
+
+            <form action="{{ url_for('main.search') }}" method="GET">
+                <div class="filter-group">
+                    <label class="filter-label">Search</label>
+                    <input type="text" name="q" class="price-input" placeholder="Product, service, seller...">
+                </div>
+
+                <button type="submit" class="apply-btn">Apply Search</button>
+            </form>
+        </div>
+
+        <div class="ad-card">
+            <h3>Sell Faster 🚀</h3>
+            <p>Post your products and services for free and reach more customers.</p>
+            <a href="{{ url_for('listing.new_listing') }}">Post Listing</a>
+        </div>
+
+        <div class="sidebar-card">
+            <div class="sidebar-title">Safe Trading Tips</div>
+            <div class="safe-tip">🔒 Meet sellers in public places.</div>
+            <div class="safe-tip">⚠️ Do not send money in advance.</div>
+            <div class="safe-tip">✅ Inspect items before payment.</div>
+            <div class="safe-tip">📞 Communicate clearly before meeting.</div>
+        </div>
+    </aside>
+
+    <section class="main">
+
+        <div class="hero">
+            <div class="hero-text">
+                <h1>Buy. Sell. Grow. All in One <em>Trusted Marketplace</em></h1>
+                <p>
+                    CloudSentinel MarketLink connects buyers, sellers, SMEs, and service providers
+                    across Nigeria with safe trading guidance.
+                </p>
+
+                <div class="hero-actions">
+                    <a href="#listings" class="hero-btn primary">Start Shopping</a>
+                    <a href="{{ url_for('listing.new_listing') }}" class="hero-btn outline">List Your Item</a>
+                </div>
+            </div>
+
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <strong>{{ listings|length }}</strong>
+                    <span>Active Listings</span>
+                </div>
+                <div class="hero-stat">
+                    <strong>36</strong>
+                    <span>States</span>
+                </div>
+                <div class="hero-stat">
+                    <strong>SMEs</strong>
+                    <span>Supported</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="trust-row">
+            <div class="trust-card">🛡️ Secure & Trusted <span>Safe trading guidance</span></div>
+            <div class="trust-card">🌍 Nigeria Coverage <span>All states and LGAs</span></div>
+            <div class="trust-card">⚡ Easy to Use <span>Simple and fast</span></div>
+            <div class="trust-card">🤝 For Everyone <span>Buyers, sellers, SMEs</span></div>
+        </div>
+
+        <section>
+            <div class="section-title">
+                Shop by Category <span>Browse All</span>
+            </div>
+
+            <div class="categories-row">
+                <a class="cat-card" href="{{ url_for('main.search', q='Electronics') }}">
+                    <div class="cat-card-icon">📱</div>
+                    <div class="cat-card-name">Electronics</div>
+                    <div class="cat-card-count">Phones, gadgets</div>
+                </a>
+
+                <a class="cat-card" href="{{ url_for('main.search', q='Fashion') }}">
+                    <div class="cat-card-icon">👗</div>
+                    <div class="cat-card-name">Fashion</div>
+                    <div class="cat-card-count">Clothes, shoes</div>
+                </a>
+
+                <a class="cat-card" href="{{ url_for('main.search', q='Vehicles') }}">
+                    <div class="cat-card-icon">🚗</div>
+                    <div class="cat-card-name">Vehicles</div>
+                    <div class="cat-card-count">Cars, bikes</div>
+                </a>
+
+                <a class="cat-card" href="{{ url_for('main.search', q='Home') }}">
+                    <div class="cat-card-icon">🏠</div>
+                    <div class="cat-card-name">Home</div>
+                    <div class="cat-card-count">Furniture, garden</div>
+                </a>
+
+                <a class="cat-card" href="{{ url_for('main.search', q='Food') }}">
+                    <div class="cat-card-icon">🍲</div>
+                    <div class="cat-card-name">Food</div>
+                    <div class="cat-card-count">Groceries, meals</div>
+                </a>
+
+                <a class="cat-card" href="{{ url_for('main.search', q='Agriculture') }}">
+                    <div class="cat-card-icon">🌾</div>
+                    <div class="cat-card-name">Agriculture</div>
+                    <div class="cat-card-count">Farm products</div>
+                </a>
+            </div>
+        </section>
+
+        <section id="listings">
+            <div class="toolbar">
+                <div class="toolbar-left">
+                    <h2>Recent Listings</h2>
+                    <p>Showing {{ listings|length }} active listing{% if listings|length != 1 %}s{% endif %}</p>
+                </div>
+
+                <div class="toolbar-right">
+                    <select class="sort-select">
+                        <option>Newest First</option>
+                        <option>Price: Low to High</option>
+                        <option>Price: High to Low</option>
+                    </select>
+                </div>
+            </div>
+
+            {% if listings %}
+                <div class="product-grid">
+                    {% for listing in listings %}
+                        <article class="product-card">
+                            <a href="{{ url_for('listing.detail', id=listing.id) }}">
+                                <div class="card-img">
+                                    <img src="{{ url_for('static', filename='uploads/listings/' + listing.image_filename) }}" alt="{{ listing.title }}">
+                                    <div class="card-badge badge-new">{{ listing.status }}</div>
+                                    <button type="button" class="wishlist-btn">♡</button>
+                                </div>
+                            </a>
+
+                            <div class="card-body">
+                                <div class="card-category">{{ listing.category }}</div>
+                                <h3 class="card-title">{{ listing.title }}</h3>
+                                <div class="card-price">₦{{ "{:,.0f}".format(listing.price) }}</div>
+
+                                <div class="card-meta">
+                                    <span class="card-location">📍 {{ listing.lga }}, {{ listing.state }}</span>
+                                    <span class="card-time">{{ listing.created_at.strftime("%d %b") }}</span>
+                                </div>
+
+                                <div class="card-seller">
+                                    <div class="seller-avatar">
+                                        {{ listing.seller.full_name[:2].upper() }}
+                                    </div>
+                                    <span class="seller-name">{{ listing.seller.full_name }}</span>
+                                    <span class="seller-rating">⭐ Trusted</span>
+                                </div>
+                            </div>
+
+                            <div class="card-footer">
+                                <a href="tel:{{ listing.contact_phone }}" class="card-btn primary">Contact</a>
+                                <a href="{{ url_for('listing.detail', id=listing.id) }}" class="card-btn ghost">Details</a>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon">🛒</div>
+                    <h3>No active listings yet</h3>
+                    <p>Be the first to post a product or service on CloudSentinel MarketLink.</p>
+                    <a href="{{ url_for('listing.new_listing') }}" class="hero-btn primary">Post First Listing</a>
+                </div>
+            {% endif %}
+        </section>
+
+        <section class="safety-box">
+            <h3>⚠️ Safety Notice</h3>
+            <p>
+                Do not send money in advance unless you personally trust the seller.
+                For safer transactions, meet in a public market, shop, office, or secure physical location.
+                Inspect the item before making payment.
+            </p>
+        </section>
+
+    </section>
+</div>
+
+{% endblock %}

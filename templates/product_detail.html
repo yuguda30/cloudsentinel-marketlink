@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="product-detail">
+    <div class="product-container">
+        <div class="product-gallery">
+            <div class="main-product-image">
+                <img src="{{ url_for('static', filename='uploads/listings/' + listing.image_filename) }}" alt="{{ listing.title }}">
+            </div>
+        </div>
+
+        <div class="product-info-panel">
+            <div class="breadcrumb">Home › {{ listing.category }} › {{ listing.title }}</div>
+
+            <span class="category-tag">{{ listing.category }}</span>
+
+            <h1>{{ listing.title }}</h1>
+
+            <div class="detail-price">₦{{ "{:,.0f}".format(listing.price) }}</div>
+
+            <div class="detail-meta">
+                <span>📍 {{ listing.lga }}, {{ listing.state }}</span>
+                <span>👁️ {{ listing.views }} views</span>
+                <span>🕒 {{ listing.created_at.strftime("%d %b %Y") }}</span>
+            </div>
+
+            <div class="condition-pill">
+                Condition: <strong>{{ listing.condition }}</strong>
+            </div>
+
+            <div class="description-box">
+                <h3>Description</h3>
+                <p>{{ listing.description }}</p>
+            </div>
+
+            <div class="seller-box">
+                <h3>About the Seller</h3>
+                <div class="seller-profile">
+                    <div class="seller-avatar big">
+                        {{ listing.seller.full_name[:2].upper() }}
+                    </div>
+                    <div>
+                        <h4>{{ listing.seller.full_name }}</h4>
+                        <p>Trusted MarketLink user</p>
+                        <span>⭐ Safe trading recommended</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-actions">
+                <a href="{{ url_for('chat.chat_room', listing_id=listing.id, user_id=listing.seller.id) }}" class="btn btn-success full-width"> Message Seller</a>
+                <a href="tel:{{ listing.contact_phone }}" class="btn btn-primary full-width">Call Seller</a>
+                <a href="https://wa.me/{{ listing.contact_phone }}" target="_blank" class="btn btn-success full-width">Chat on WhatsApp</a>
+            </div>
+
+            <div class="safety-alert">
+                <strong>⚠️ Safety Warning:</strong>
+                Do not send money in advance unless you personally trust the seller.
+                Meet in a public market, shop, office, or secure physical location.
+                Inspect the item before making payment.
+            </div>
+        </div>
+    </div>
+</section>
+{% if current_user.is_authenticated and current_user.id != listing.seller.id %}
+    <a href="{{ url_for('chat.chat_room', listing_id=listing.id, user_id=listing.seller.id) }}" class="btn btn-success full-width">
+        Message Seller
+    </a>
+{% elif not current_user.is_authenticated %}
+    <a href="{{ url_for('auth.login') }}" class="btn btn-success full-width">
+        Login to Message Seller
+    </a>
+{% endif %}
+
+{% endblock %}

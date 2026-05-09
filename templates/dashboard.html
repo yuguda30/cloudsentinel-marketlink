@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="dashboard-section">
+    <div class="dashboard-header">
+        <div>
+            <h1>Seller Dashboard</h1>
+            <p>Manage your products, services, views, and sold listings.</p>
+        </div>
+
+        <a href="{{ url_for('listing.new_listing') }}" class="btn btn-gold">+ Add New Listing</a>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>{{ active_count }}</h3>
+            <p>Active Listings</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>{{ sold_count }}</h3>
+            <p>Sold Items</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>{{ total_views }}</h3>
+            <p>Total Views</p>
+        </div>
+    </div>
+
+    <div class="dashboard-card">
+        <h2>My Recent Listings</h2>
+
+        {% if listings %}
+            <div class="dashboard-table-wrapper">
+                <table class="dashboard-table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Views</th>
+                            <th>Date Posted</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for listing in listings %}
+                            <tr>
+                                <td>
+                                    <div class="table-product">
+                                        <img src="{{ url_for('static', filename='uploads/listings/' + listing.image_filename) }}" alt="{{ listing.title }}">
+                                        <div>
+                                            <strong>{{ listing.title }}</strong>
+                                            <span>{{ listing.category }}</span>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>₦{{ "{:,.0f}".format(listing.price) }}</td>
+
+                                <td>
+                                    {% if listing.status == "active" %}
+                                        <span class="status active">Active</span>
+                                    {% else %}
+                                        <span class="status sold">Sold</span>
+                                    {% endif %}
+                                </td>
+
+                                <td>{{ listing.views }}</td>
+
+                                <td>{{ listing.created_at.strftime("%d %b %Y") }}</td>
+
+                                <td>
+                                    <div class="table-actions">
+                                        {% if listing.status == "active" %}
+                                            <a href="{{ url_for('listing.detail', id=listing.id) }}" class="btn btn-small btn-primary">View</a>
+                                            <a href="{{ url_for('listing.edit_listing', id=listing.id) }}" class="btn btn-small btn-outline">Edit</a>
+                                            <a href="{{ url_for('listing.mark_sold', id=listing.id) }}" class="btn btn-small btn-success" onclick="return confirmMarkSold()">Sold</a>
+                                        {% endif %}
+
+                                        <a href="{{ url_for('listing.delete_listing', id=listing.id) }}" class="btn btn-small btn-danger" onclick="return confirmDelete()">Delete</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">📦</div>
+                <h3>No listings yet</h3>
+                <p>Start by posting your first product or service.</p>
+                <a href="{{ url_for('listing.new_listing') }}" class="hero-btn primary">Post Listing</a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock %}

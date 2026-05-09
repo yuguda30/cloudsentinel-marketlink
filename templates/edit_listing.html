@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="form-section">
+    <div class="form-card">
+        <div class="form-header">
+            <h1>Edit Listing</h1>
+            <p>Update your product or service details.</p>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data">
+            <div class="current-image">
+                <p>Current Image</p>
+                <img src="{{ url_for('static', filename='uploads/listings/' + listing.image_filename) }}" alt="{{ listing.title }}">
+            </div>
+
+            <div class="form-group">
+                <label>Change Image Optional, Max 1MB</label>
+                <input type="file" name="image" accept=".jpg,.jpeg,.png">
+            </div>
+
+            <div class="form-group">
+                <label>Item Title *</label>
+                <input type="text" name="title" value="{{ listing.title }}" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Category *</label>
+                    <select name="category" required>
+                        {% for category in ["Electronics", "Fashion", "Vehicles", "Home & Furniture", "Food & Groceries", "Agriculture", "Services", "Jobs", "Education", "Others"] %}
+                            <option value="{{ category }}" {% if listing.category == category %}selected{% endif %}>{{ category }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Condition *</label>
+                    <select name="condition" required>
+                        {% for condition in ["Brand New", "Foreign Used", "Nigerian Used", "Refurbished", "Service"] %}
+                            <option value="{{ condition }}" {% if listing.condition == condition %}selected{% endif %}>{{ condition }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Price (₦) *</label>
+                    <input type="number" name="price" value="{{ listing.price }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Phone Number *</label>
+                    <input type="text" name="phone" value="{{ listing.contact_phone }}" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>State *</label>
+                    <select name="state" id="stateSelect" required>
+                        {% for state in states %}
+                            <option value="{{ state }}" {% if listing.state == state %}selected{% endif %}>{{ state }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>LGA *</label>
+                    <select name="lga" id="lgaSelect" data-selected="{{ listing.lga }}" required>
+                        <option value="{{ listing.lga }}">{{ listing.lga }}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Description *</label>
+                <textarea name="description" rows="5" required>{{ listing.description }}</textarea>
+            </div>
+
+            <div class="form-actions">
+                <a href="{{ url_for('dashboard.dashboard') }}" class="btn btn-outline">Cancel</a>
+                <button type="submit" class="btn btn-primary">Update Listing</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+{% endblock %}

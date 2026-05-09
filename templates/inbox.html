@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="chat-section">
+    <div class="inbox-container">
+        <h1>Messages</h1>
+        <p>Your conversations with buyers and sellers.</p>
+
+        {% if conversations %}
+            <div class="inbox-list">
+                {% for convo in conversations %}
+                    <a href="{{ url_for('chat.chat_room', listing_id=convo.listing.id, user_id=convo.other_user.id) }}" class="inbox-item">
+                        <div class="seller-avatar big">
+                            {{ convo.other_user.full_name[:2].upper() }}
+                        </div>
+
+                        <div class="inbox-info">
+                            <strong>{{ convo.other_user.full_name }}</strong>
+                            <span>{{ convo.listing.title }}</span>
+                            <p>{{ convo.last_message.content }}</p>
+                        </div>
+
+                        {% if convo.unread_count > 0 %}
+                            <div class="unread-badge">{{ convo.unread_count }}</div>
+                        {% endif %}
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">💬</div>
+                <h3>No messages yet</h3>
+                <p>Start by messaging a seller from a product detail page.</p>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock %}
